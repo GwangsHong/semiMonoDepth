@@ -14,14 +14,36 @@ You can train on multiple GPUs by setting them with the --num_gpus flag, make 
 This model requires rectified stereo pairs for training.
 There are two main datasets available:
 ### [KITTI](http://www.cvlibs.net/datasets/kitti/raw_data.php)
+```
+.
+├── ./kitti_dataset
+│   ├── ./kitti_dataset/2011_09_26
+│   │   ├── ./kitti_dataset/2011_09_26/2011_09_26_drive_0001_sync
+│   │   │   ├── ./kitti_dataset/2011_09_26/2011_09_26_drive_0001_sync/image_00
+│   │   │   │   ├── ./kitti_dataset/2011_09_26/2011_09_26_drive_0001_sync/image_00/data
+│   │   │   │   │   ├── ./kitti_dataset/2011_09_26/2011_09_26_drive_0001_sync/image_00/data/0000000000.png
+│   │   │   │   │   └── ...
+
+```
 You can download the entire raw dataset by running:
 ```
-wget -i utils/kitti_archives_to_download.txt -P ~/my/output/kitti_folder/
+wget -i utils/kitti_archives_to_download.txt -P ~/kitti_dataset/
 ```
 ### [Scene flow dataset](https://lmb.informatik.uni-freiburg.de/resources/datasets/SceneFlowDatasets.en.html)
+```
+├── ./sceneflow_dataset
+│   └── ./sceneflow_dataset/flyingthings3d
+│       ├── ./sceneflow_dataset/flyingthings3d/disparity
+│       │   ├── ./sceneflow_dataset/flyingthings3d/disparity/TRAIN
+│       │   │   ├── ./sceneflow_dataset/flyingthings3d/disparity/TRAIN/A
+│       │   │   │   ├── ./sceneflow_dataset/flyingthings3d/disparity/TRAIN/A/0000
+│       │   │   │   │   ├── ./sceneflow_dataset/flyingthings3d/disparity/TRAIN/A/0000/left
+│       │   │   │   │   │   ├── ./sceneflow_dataset/flyingthings3d/disparity/TRAIN/A/0000/left/0006.pfm
+│       │   │   │   │   │   └── ...
+```
 We also used synthesis dataset for semi-supervised learning. 
 ```
-wget -i utils/scenflow_archives_to_download.txt -P ~/my/output/scenflow_folder/
+wget -i utils/scenflow_archives_to_download.txt -P ~/sceneflow_dataset/
 ```
 
 ## Traning
@@ -32,7 +54,7 @@ The model has three steps: learnig for generator using semi-supervised loss, lea
 
 train_step 1 and 2 are required to load the checkpoint, you can be doen with --checkpoint_path
 ```
-python semiMonoDepth_main.py --mode train --labeled_data_path ~/data/sceneflow/ --unlabeled_data_path ~/data/KITTI/ --labeled_filenames_file utils/filenames/flyingthings3d_train_shuffle_files.txt --unlabeled_filenames_file utils/filenames/kitti_train_files.txt   --train_step 0  --log_directory ~/tmp/
+python semiMonoDepth_main.py --mode train --labeled_data_path ~/sceneflow_dataset/ --unlabeled_data_path ~/kitti_dataset/ --labeled_filenames_file utils/filenames/flyingthings3d_train_shuffle_files.txt --unlabeled_filenames_file utils/filenames/kitti_train_files.txt   --train_step 0  --log_directory ~/tmp/
 ```
 
 ## Testing
